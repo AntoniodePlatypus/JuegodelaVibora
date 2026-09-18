@@ -6,6 +6,13 @@ food = vector(0, 0)
 snake = [vector(10, 0)]
 aim = vector(0, -10)
 
+# Lista de 5 colores excluyendo el rojo
+COLORS = ['blue', 'green', 'purple', 'orange', 'black']
+
+# Asignación de colores distintos entre sí
+snake_color = choice(COLORS)
+food_color = choice([c for c in COLORS if c != snake_color])
+
 def change(x, y):
     """Change snake direction."""
     aim.x = x
@@ -14,15 +21,6 @@ def change(x, y):
 def inside(head):
     """Return True if head inside boundaries."""
     return -200 < head.x < 190 and -200 < head.y < 190
-
-def move_food():
-    """Mueve la comida un paso al azar sin salirse de los límites."""
-    directions = [vector(10, 0), vector(-10, 0), vector(0, 10), vector(0, -10)]
-    step = choice(directions)
-    next_food = food + step
-    
-    if inside(next_food):
-        food.move(step)
 
 def move():
     """Move snake forward one segment."""
@@ -42,14 +40,13 @@ def move():
         food.y = randrange(-15, 15) * 10
     else:
         snake.pop(0)
-        move_food()  # La comida da un paso aleatorio cada turno
 
     clear()
 
     for body in snake:
-        square(body.x, body.y, 9, 'black')
+        square(body.x, body.y, 9, snake_color)
 
-    square(food.x, food.y, 9, 'green')
+    square(food.x, food.y, 9, food_color)
     update()
     ontimer(move, 100)
 
